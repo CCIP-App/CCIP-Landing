@@ -9,6 +9,8 @@ let defaultSettings = require('./defaults');
 // Add needed plugins here
 let BowerWebpackPlugin = require('bower-webpack-plugin');
 
+let VersionFile = require('webpack-version-file-plugin');
+
 let config = Object.assign({}, baseConfig, {
   entry: path.join(__dirname, '../src/index'),
   cache: false,
@@ -24,6 +26,11 @@ let config = Object.assign({}, baseConfig, {
     new webpack.optimize.UglifyJsPlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.AggressiveMergingPlugin(),
+    new VersionFile({
+      packageFile: path.join(__dirname, '../package.json'),
+      template: path.join(__dirname, '../version.ejs'),
+      outputFile: path.join(__dirname, '../dist/assets/version.json')
+    }),
     new webpack.NoErrorsPlugin()
   ],
   module: defaultSettings.getDefaultModules()

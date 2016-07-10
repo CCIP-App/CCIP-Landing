@@ -8,6 +8,7 @@ import AppBadge from './AppBadge';
 import config from '../config/base';
 
 let hljs = require('highlight.js')
+let moment = require('moment');
 
 let faviconFile = require('../favicon.ico');
 let manifestFile = require('../manifest.json');
@@ -92,14 +93,21 @@ class AppMainComponent extends React.Component {
     constructor() {
         super();
         this.state = {
-          manifest: ''
+          manifest: '',
+          versions: {}
         }
     }
     componentWillMount() {
         fetch(manifestFile)
             .then((response) => response.json())
             .then((responseData) => {
-                this.setState({manifest: JSON.stringify(responseData, null, 4)});
+                this.setState({manifest: responseData});
+            });
+        fetch('assets/version.json')
+            .then((response) => response.json())
+            .then((responseData) => {
+                console.log(responseData)
+                this.setState({versions: responseData});
             });
     }
     render() {
@@ -133,11 +141,12 @@ class AppMainComponent extends React.Component {
         }
         return (
             <div className="index">
+                <h3>{this.state.versions.name} Landing Page</h3>
+                <h5>v{this.state.versions.version} ({moment(this.state.versions.buildDate).format('X~YYYY-MM-DD HH:mm:ss Z')})</h5>
                 Browser: <span id="browser">{browserType}</span>
                 <br />
-                <div>
-                    google play banner for <span style={{color: 'red'}}>{config.GooglePlayAppId}</span>
-                </div>
+                <div>iOS Banner for <span style={{color: 'red'}}>id{config.iTunesAppId}</span></div>
+                <div>Google Play Banner for <span style={{color: 'red'}}>{config.GooglePlayAppId}</span></div>
                 <div id="output"></div>
                 <br />
                 Token: <span id="token" style={{color: 'red'}}>{accessToken}</span>
@@ -148,7 +157,8 @@ class AppMainComponent extends React.Component {
                     disabled={browserType == BrowserTypes.WebBrowser}>
                         Login{browserType == BrowserTypes.WebBrowser ? ' (Unsupport)' : ''}
                 </button>
-                <pre className="hljs" style={{display: 'block', width: '800px', marginLeft: '50px'}} dangerouslySetInnerHTML={{__html: hljs.highlight('json', this.state.manifest).value}}></pre>
+                <pre className="hljs" style={{display: 'block', width: '400px', marginLeft: '50px'}}
+                    dangerouslySetInnerHTML={{__html: hljs.highlight('json', JSON.stringify(this.state.manifest, null, 2)).value}}></pre>
             </div>
         );
     }
