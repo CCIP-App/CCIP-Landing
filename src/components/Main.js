@@ -4,6 +4,10 @@ require('styles/App.css');
 import React from 'react';
 import AppBadge from './AppBadge';
 
+let faviconFile = require('../favicon.ico');
+let manifestFile = require('../manifest.json');
+let appIcon72x2File = require('../images/Icon-72@2x.png');
+
 const parameters = location.search.split('?').pop().split('&').map(p => {
     var ps = p.split('=');
     var o = {};
@@ -64,6 +68,11 @@ const mobile = {
         return navigator.userAgent.match(/Android/i) ? true : false;
     }
 };
+const BrowserTypes = {
+    get iOS() { return 'iOS'; },
+    get Android() { return 'Android'; },
+    get WebBrowser() { return 'WebBrowser'; }
+};
 
 class AppMainComponent extends React.Component {
     loginApp() {
@@ -75,18 +84,31 @@ class AppMainComponent extends React.Component {
             alert('Not support for your platform');
         }
     }
+    constructor() {
+        super();
+        this.state = {
+          manifest: ''
+        }
+    }
+    componentWillMount() {
+        fetch(manifestFile)
+            .then((response) => response.json())
+            .then((responseData) => {
+                this.setState({manifest: JSON.stringify(responseData, null, 4)});
+            });
+    }
     render() {
         let storeBadge = [];
         let browserType = '';
         let accessToken = parameters.token || '';
         if (mobile.iOS) {
-            browserType = 'iOS';
+            browserType = BrowserTypes.iOS;
             storeBadge.push(appBadge.appStore);
         } else if (mobile.Android) {
-            browserType = 'Android';
+            browserType = BrowserTypes.Android;
             storeBadge.push(appBadge.googlePlay);
         } else {
-            browserType = 'WebBrowser';
+            browserType = BrowserTypes.WebBrowser;
             storeBadge.push(appBadge.googlePlay);
             storeBadge.push(appBadge.appStore);
         }
@@ -96,10 +118,11 @@ class AppMainComponent extends React.Component {
         var badges = [];
         for(var i = 0; i < storeBadge.length; i++) {
             var sb = storeBadge[i];
-            var desktopBrowser = browserType == 'WebBrowser';
+            var desktopBrowser = browserType == BrowserTypes.WebBrowser;
             var store = desktopBrowser ? sb.webStore : sb.store;
             var badge = (
-                <AppBadge key={i} id={sb.id} url={sb.url} store={store} desktop={desktopBrowser} margin={sb.margin} width={sb.width} height={sb.height} />
+                <AppBadge key={i} id={sb.id} url={sb.url} store={store} desktop={desktopBrowser}
+                    margin={sb.margin} width={sb.width} height={sb.height} />
             );
             badges.push(badge);
         }
@@ -107,11 +130,22 @@ class AppMainComponent extends React.Component {
             <div className="index">
                 Browser: <span id="browser">{browserType}</span>
                 <br />
+                <div>
+                    google play banner for <span style={{color: 'red'}}>
+                        {(JSON.parse(this.state.manifest || '{ "related_applications": [ { "id": "" } ]}')).related_applications[0].id}
+                    </span>
+                </div>
+                <div id="output"></div>
+                <br />
                 Token: <span id="token">{accessToken}</span>
                 <br /><br />
                 Step 1 - Install App: <span id="store">{badges}</span>
                 <br /><br />
-                Step 2 - Login App: <button id="login" onClick={this.loginApp}>Login</button>
+                Step 2 - Login App: <button id="login" onClick={this.loginApp}
+                    disabled={browserType == BrowserTypes.WebBrowser}>
+                        Login{browserType == BrowserTypes.WebBrowser ? ' (Unsupport)' : ''}
+                </button>
+                <pre>{this.state.manifest}</pre>
             </div>
         );
     }

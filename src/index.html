@@ -8,12 +8,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-itunes-app" content="app-id=865971238">
   <meta name="google-play-app" content="app-id=edu.pccu.classmsg">
-  <link rel="manifest" href="manifest.json">
+  <link rel="shortcut icon" href="assets/favicon.ico">
+  <link rel="manifest" href="assets/manifest.json">
 </head>
 <body>
   <div id="app"></div>
 
   <script>__REACT_DEVTOOLS_GLOBAL_HOOK__ = parent.__REACT_DEVTOOLS_GLOBAL_HOOK__</script>
   <script type="text/javascript" src="/assets/app.js"></script>
+  <script type="text/javascript">
+    window.addEventListener('beforeinstallprompt', function(e) {
+        var outputElement = document.querySelector('#output');
+        outputElement.textContent = 'beforeinstallprompt Event fired';
+    });
+  </script>
 </body>
 </html>
