@@ -1,9 +1,13 @@
 require('normalize.css/normalize.css');
+require('highlight.js/styles/monokai-sublime.css');
 require('styles/App.css');
 
 import 'whatwg-fetch';
 import React from 'react';
 import AppBadge from './AppBadge';
+import config from '../config/base';
+
+let hljs = require('highlight.js')
 
 let faviconFile = require('../favicon.ico');
 let manifestFile = require('../manifest.json');
@@ -132,13 +136,11 @@ class AppMainComponent extends React.Component {
                 Browser: <span id="browser">{browserType}</span>
                 <br />
                 <div>
-                    google play banner for <span style={{color: 'red'}}>
-                        {(JSON.parse(this.state.manifest || '{ "related_applications": [ { "id": "" } ]}')).related_applications[0].id}
-                    </span>
+                    google play banner for <span style={{color: 'red'}}>{config.GooglePlayAppId}</span>
                 </div>
                 <div id="output"></div>
                 <br />
-                Token: <span id="token">{accessToken}</span>
+                Token: <span id="token" style={{color: 'red'}}>{accessToken}</span>
                 <br /><br />
                 Step 1 - Install App: <span id="store">{badges}</span>
                 <br /><br />
@@ -146,7 +148,7 @@ class AppMainComponent extends React.Component {
                     disabled={browserType == BrowserTypes.WebBrowser}>
                         Login{browserType == BrowserTypes.WebBrowser ? ' (Unsupport)' : ''}
                 </button>
-                <pre>{this.state.manifest}</pre>
+                <pre className="hljs" style={{display: 'block', width: '800px', marginLeft: '50px'}} dangerouslySetInnerHTML={{__html: hljs.highlight('json', this.state.manifest).value}}></pre>
             </div>
         );
     }

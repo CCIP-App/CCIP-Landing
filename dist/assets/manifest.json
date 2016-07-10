@@ -1,7 +1,6 @@
 {
   "name": "COSCUP 2016 Pass",
   "short_name": "COSCUP Pass",
-  "start_url": "./index.html",
   "display": "standalone",
   "icons": [
     {
@@ -10,9 +9,12 @@
       "type": "image/png"
     }
   ],
-  "theme_color": "#db5945",
   "prefer_related_applications": true,
   "related_applications": [
+    {
+      "platform": "iOS",
+      "id": "1128067951"
+    },
     {
       "platform": "play",
       "id": "org.coscup.ccip"
