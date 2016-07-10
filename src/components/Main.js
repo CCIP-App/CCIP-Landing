@@ -1,6 +1,7 @@
 require('normalize.css/normalize.css');
 require('styles/App.css');
 
+import 'whatwg-fetch';
 import React from 'react';
 import AppBadge from './AppBadge';
 
