@@ -7,7 +7,7 @@
   "scripts": {
     "clean": "rimraf dist/*",
     "copydist": "copyfiles -f ./src/index.html ./dist",
-    "copy": "static-react src/components/Root.js > ./src/index.html & npm run copydist",
+    "copy": ". build_statics.sh",
     "dist": "npm run copy & webpack --env=dist",
     "lint": "eslint ./src",
     "posttest": "npm run lint",

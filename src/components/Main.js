@@ -29,14 +29,15 @@ const parameters = location.search.split('?').pop().split('&').map(p => {
 const appUrl = {
     get iOS() {
         return {
-            login: `ccip://login/?token=${(parameters.token || '')}`,
-            store: `itms-apps://itunes.apple.com/app/id${document.querySelector('meta[name="apple-itunes-app"]').content.split('=').pop()}`,
+            login: 'ccip://login/?token=',
+            store: 'itms-services://?action=download-manifest&amp;url=https://ccip.hhmr.tk/manifest.plist',
+            //`itms-apps://itunes.apple.com/app/id${document.querySelector('meta[name="apple-itunes-app"]').content.split('=').pop()}`,
             webStore: `https://itunes.apple.com/app/id${document.querySelector('meta[name="apple-itunes-app"]').content.split('=').pop()}`
         }
     },
     get Android() {
         return {
-            login: `https://ccip.cprteam.org/?token=${(parameters.token || '')}`,
+            login: 'ccip://login/?token=',
             store: `market://details?id=${document.querySelector('meta[name="google-play-app"]').content.split('=').pop()}`,
             webStore: `https://play.google.com/store/apps/details?id=${document.querySelector('meta[name="google-play-app"]').content.split('=').pop()}`
         };
@@ -82,19 +83,25 @@ const BrowserTypes = {
 
 class AppMainComponent extends React.Component {
     loginApp() {
+        let url = null;
         if (mobile.iOS) {
-            window.location = appUrl.iOS.login;
+            url = `${appUrl.iOS.login}${this.state.accessToken}`;
         } else if (mobile.Android) {
-            window.location = appUrl.Android.login;
+            url = `${appUrl.Android.login}${this.state.accessToken}`;
+        }
+        if (url == null) {
+            let msg = `Not support for your platform\nToken: ${this.state.accessToken}`;
+            alert(msg);
         } else {
-            alert('Not support for your platform');
+            window.location.href = url;
         }
     }
     constructor() {
         super();
         this.state = {
-          manifest: '',
-          versions: {}
+          manifest: 'Loading...',
+          versions: {},
+          accessToken: parameters.token || ''
         }
     }
     componentWillMount() {
@@ -106,14 +113,19 @@ class AppMainComponent extends React.Component {
         fetch('assets/version.json')
             .then((response) => response.json())
             .then((responseData) => {
-                console.log(responseData)
                 this.setState({versions: responseData});
             });
+    }
+    changeToken(token) {
+        this.state.accessToken = token;
+        document.querySelector('#token').innerHTML = token;
+        if ((parameters['test-auto'] || 'false').toLowerCase() == 'true') {
+            this.loginApp();
+        }
     }
     render() {
         let storeBadge = [];
         let browserType = '';
-        let accessToken = parameters.token || '';
         if (mobile.iOS) {
             browserType = BrowserTypes.iOS;
             storeBadge.push(appBadge.appStore);
@@ -139,6 +151,82 @@ class AppMainComponent extends React.Component {
             );
             badges.push(badge);
         }
+        let testList = [];
+        let testListTokens = [
+            '7679f08f7eaeef5e9a65a1738ae2840e',
+            'ee33c408df4ffad0c55eaf6ec2420717',
+            'fccfc8bfa07643a1ca8015cbe74f5f17',
+            '93dc46e553ac602b0d6c6d7307e523f1',
+            '2f574789271d26a0c569779e8348ab68',
+            '1a04f8728ffc11a4cdb9bc7dc79caac0',
+            'd2ec0f1f28db8a4c1483c370953b9f0c',
+            '6520d6fa2fee26045104db0364a092e9',
+            '50ecac11d697bf76092bccde23607b27',
+            '125384b0058f0ce2d5aae8e80d94c5d7',
+            '087e78bb1460e7ddbafd6a3e004f095e',
+            'd38c9001982e5601f2d37a0401528754',
+            '5d765c2e8c5243c0adc3af8495841f5d',
+            '16e1dc90555abf7b5bf5781882982755',
+            '1aadcabf9f47e932ea6245cfd51c02e8',
+            'f1349e8156d2b05e23cf72d83a63c0f3',
+            'bb0d74e19d0ce01d63af2bd6d44f06df',
+            '8c654d02c35a8040228c3fef4b25e9d4',
+            '17bcb36a975e125f9cbea503a54603f0',
+            '0c4facff3bc9879061b4eddb631339fe',
+            '78e30e2397f1d8fda75eb930dd3dcf87',
+            '6a487514a78c67098054e07d1440c391',
+            '8a580a71b3c80199e6c7438618b4f030',
+            'c7847acc730ad24412b68f5c9f5da851',
+            'aba94b39687829edef692a384dd698aa',
+            '4ae0249680951e256954b0b67fddbcc1',
+            'e9b4c7c9995d63993007a211b817ef68',
+            '222449320f2c14d54398f21bdbf253a2',
+            '6edd6937afcabef71c0917d148811d54',
+            '84b1701a3964056eb4bb85daee801522',
+            '307b11ad88ae3897aadd6af42ba78d2d',
+            'a4f07c20edb3ca71ba1457f2d79d90b7',
+            '99a3afda0f76109b04ae157c38f9fcb6',
+            '8145928fa6eb669cc201afd6b52a7f98',
+            '85e13879cd70ee72532dc8823dbb503f',
+            '48403a8ade71205cf92c1820deb7a962',
+            'e041d7afabeb71d69ad6bdac96d95575',
+            'de0881a5824b9dba0925e5fdf15bf6bd',
+            '4aa7cdc891898e1c74a810448f59102c',
+            'ce41ae89b2ad073c6321bce05d563885',
+            '2d4acd203b335e400ef36ed4d34ee2e2',
+            'e7f64b31340199985ee6803f8ab3b39e',
+            '18eac5a3946862b8cd34e2d37c229b3d',
+            '5382f8e7718f94736d850482e7ae8316',
+            'e64d153fa408cb4e74ea0bff3a7b4d2e',
+            'fc9db41221ac1b7403d185d58a44888e',
+            'b7edc7b7341bb77e611d8f1d0a643819',
+            'c4f9bde7cdb2099961cce496a2f7b0a8',
+            'c33c66ae4a39134b348dc4b619dc66e4',
+            '1c75cd1c124e2ede9aefb8b45a89adee',
+            'df779a8bb35387d8792c8823b30ce9ce',
+            '36186f7d89d81e4961742ebeaa669314',
+            '9b7391abcc2384f7836f47bde388a961',
+            '3eb973079e7416b20a852ef96ebca612',
+            '9d869b8db3b79add3092642f2262f22a',
+            '3f828284bb06d720cc8fede98db56bc6',
+            'd56eabaf6b0709ff718cd5977b787a8b',
+            '069b6e3c73e749684a7c34be84ecc547'
+        ];
+        if ((parameters['test-list'] || 'false').toLowerCase() == 'true') {
+            testListTokens.map(t => {
+                testList.push(
+                    <li key={t} style={{marginBottom: '10px'}}>
+                        <button onClick={this.changeToken.bind(this, t)}>
+                            Use token: <span style={{fontFamily: '"Lucida Console", Monaco, monospace', fontSize: '12pt'}}>{t}</span>
+                        </button>
+                    </li>
+                );
+            });
+        }
+        let testListResult = '';
+        if (testList.length > 0) {
+            testListResult = (<ol className="prefix0 reversed">{testList}</ol>);
+        }
         return (
             <div className="index">
                 <h3>{this.state.versions.name} Landing Page</h3>
@@ -149,16 +237,17 @@ class AppMainComponent extends React.Component {
                 <div>Google Play Banner for <span style={{color: 'red'}}>{config.GooglePlayAppId}</span></div>
                 <div id="output"></div>
                 <br />
-                Token: <span id="token" style={{color: 'red'}}>{accessToken}</span>
+                Token: <span id="token" style={{color: 'red'}}>{this.state.accessToken}</span>
                 <br /><br />
                 Step 1 - Install App: <span id="store">{badges}</span>
                 <br /><br />
-                Step 2 - Login App: <button id="login" onClick={this.loginApp}
+                Step 2 - Login App: <button id="login" onClick={this.loginApp.bind(this)}
                     disabled={browserType == BrowserTypes.WebBrowser}>
                         Login{browserType == BrowserTypes.WebBrowser ? ' (Unsupport)' : ''}
                 </button>
                 <pre className="hljs" style={{display: 'block', width: '400px', marginLeft: '50px'}}
-                    dangerouslySetInnerHTML={{__html: hljs.highlight('json', JSON.stringify(this.state.manifest, null, 2)).value}}></pre>
+                    dangerouslySetInnerHTML={{__html: hljs.highlight('json', JSON.stringify(this.state.manifest, null, 2).replace(/^"|"$/gi, '')).value}}></pre>
+                <div className="test-list">{testListResult}</div>
             </div>
         );
     }
