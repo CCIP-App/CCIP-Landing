@@ -37,7 +37,7 @@ const appUrl = {
     },
     get Android() {
         return {
-            login: 'ccip://login/?token=',
+            login: 'https://coscup.cprteam.org/?token=',
             store: `market://details?id=${document.querySelector('meta[name="google-play-app"]').content.split('=').pop()}`,
             webStore: `https://play.google.com/store/apps/details?id=${document.querySelector('meta[name="google-play-app"]').content.split('=').pop()}`
         };
