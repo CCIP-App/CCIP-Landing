@@ -33,8 +33,7 @@ const appUrl = {
     get iOS() {
         return {
             login: 'ccip://login/?token=',
-            store: 'itms-services://?action=download-manifest&amp;url=https://ccip.hhmr.tk/manifest.plist',
-            //`itms-apps://itunes.apple.com/app/id${document.querySelector('meta[name="apple-itunes-app"]').content.split('=').pop()}`,
+            store: `itms-apps://itunes.apple.com/app/id${document.querySelector('meta[name="apple-itunes-app"]').content.split('=').pop()}`,
             webStore: `https://itunes.apple.com/app/id${document.querySelector('meta[name="apple-itunes-app"]').content.split('=').pop()}`
         }
     },
