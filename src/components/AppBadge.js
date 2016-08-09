@@ -23,7 +23,9 @@ class AppBadgeComponent extends React.Component {
             display: 'inline-block',
             width: '135px',
             height: '40px',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            marginLeft: this.props.padding,
+            marginRight: this.props.padding
         };
         return (
           <span id={this.props.id} style={styles} onClick={this.clickEvent.bind(this, this.props)}></span>

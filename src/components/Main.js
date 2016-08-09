@@ -12,7 +12,6 @@ let moment = require('moment');
 
 let faviconFile = require('../favicon.ico');
 let manifestFile = require('../manifest.json');
-let appIcon72x2File = require('../images/Icon-72@2x.png');
 
 const parameters = location.search.split('?').pop().split('&').map(p => {
     var ps = p.split('=');
@@ -103,6 +102,9 @@ class AppMainComponent extends React.Component {
           versions: {},
           accessToken: parameters.token || ''
         }
+        if ((parameters.autoLogin || 'false').toLowerCase() == 'true') {
+            this.loginApp();
+        }
     }
     componentWillMount() {
         fetch(manifestFile)
@@ -137,9 +139,6 @@ class AppMainComponent extends React.Component {
             storeBadge.push(appBadge.googlePlay);
             storeBadge.push(appBadge.appStore);
         }
-        if ((parameters.autoLogin || 'false').toLowerCase() == 'true') {
-            this.loginApp();
-        }
         var badges = [];
         for(var i = 0; i < storeBadge.length; i++) {
             var sb = storeBadge[i];
@@ -147,7 +146,7 @@ class AppMainComponent extends React.Component {
             var store = desktopBrowser ? sb.webStore : sb.store;
             var badge = (
                 <AppBadge key={i} id={sb.id} url={sb.url} store={store} desktop={desktopBrowser}
-                    margin={sb.margin} width={sb.width} height={sb.height} />
+                    margin={sb.margin} width={sb.width} height={sb.height} padding={5} />
             );
             badges.push(badge);
         }
@@ -229,25 +228,32 @@ class AppMainComponent extends React.Component {
         }
         return (
             <div className="index">
-                <h3>{this.state.versions.name} Landing Page</h3>
-                <h5>v{this.state.versions.version} ({moment(this.state.versions.buildDate).format('X~YYYY-MM-DD HH:mm:ss Z')})</h5>
-                Browser: <span id="browser">{browserType}</span>
-                <br />
-                <div>iOS Banner for <span style={{color: 'red'}}>id{config.iTunesAppId}</span></div>
-                <div>Google Play Banner for <span style={{color: 'red'}}>{config.GooglePlayAppId}</span></div>
-                <div id="output"></div>
-                <br />
-                Token: <span id="token" style={{color: 'red'}}>{this.state.accessToken}</span>
-                <br /><br />
-                Step 1 - Install App: <span id="store">{badges}</span>
-                <br /><br />
-                Step 2 - Login App: <button id="login" onClick={this.loginApp.bind(this)}
+                <div id="debug" style={{ display: (parameters.debug || '').toLowerCase() == 'true' ? 'block' : 'none' }}>
+                    <h3>{this.state.versions.name} Landing Page</h3>
+                    <h5>v{this.state.versions.version} ({moment(this.state.versions.buildDate).format('X~YYYY-MM-DD HH:mm:ss Z')})</h5>
+                    Browser: <span id="browser">{browserType}</span>
+                    <br />
+                    <div>iOS Banner for <span style={{color: 'red'}}>id{config.iTunesAppId}</span></div>
+                    <div>Google Play Banner for <span style={{color: 'red'}}>{config.GooglePlayAppId}</span></div>
+                    <div id="output"></div>
+                    <br />
+                    Token: <span id="token" style={{color: 'red'}}>{this.state.accessToken}</span>
+                    <br />
+                    <pre className="hljs" style={{ display: 'none', width: '400px', marginLeft: '50px' }}
+                        dangerouslySetInnerHTML={{ __html: hljs.highlight('json', JSON.stringify(this.state.manifest, null, 2).replace(/^"|"$/gi, '')).value }}></pre>
+                    <div className="test-list">{testListResult}</div>
+                </div>
+                <div id="appBox">
+                    <div id="appBackground"></div>
+                    <img id="appIcon" src="../images/Icon.svg" />
+                    <div style={{ color: '#4a4a4a', fontSize: '20px', textAlign: 'center', fontWeight: '500', position: 'fixed', top: '38%', width: '100%' }}>COSCUP PASS</div>
+                    <div style={{ color: '#4a4a4a', fontSize: '15px', textAlign: 'center', position: 'fixed', top: '50%', width: '100%' }}>下載應用程式後登入即可使用。</div>
+                    <div id="store" style={{ textAlign: 'center', position: 'fixed', top: '70%', width: '100%' }}>{badges}</div>
+                </div>
+                <span id="login" onClick={this.loginApp.bind(this)}
                     disabled={browserType == BrowserTypes.WebBrowser}>
-                        Login{browserType == BrowserTypes.WebBrowser ? ' (Unsupport)' : ''}
-                </button>
-                <pre className="hljs" style={{display: 'block', width: '400px', marginLeft: '50px'}}
-                    dangerouslySetInnerHTML={{__html: hljs.highlight('json', JSON.stringify(this.state.manifest, null, 2).replace(/^"|"$/gi, '')).value}}></pre>
-                <div className="test-list">{testListResult}</div>
+                        登入{browserType == BrowserTypes.WebBrowser ? ' (不支援的裝置)' : ''}
+                </span>
             </div>
         );
     }
