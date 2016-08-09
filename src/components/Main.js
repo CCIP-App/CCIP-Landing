@@ -10,8 +10,12 @@ import config from '../config/base';
 let hljs = require('highlight.js')
 let moment = require('moment');
 
+let background = require('../images/bkg3.png');
+let coscup = require('../images/coscup.svg');
+
 let faviconFile = require('../favicon.ico');
 let manifestFile = require('../manifest.json');
+let appIcon = require('../images/Icon.svg');
 
 const parameters = location.search.split('?').pop().split('&').map(p => {
     var ps = p.split('=');
@@ -245,7 +249,7 @@ class AppMainComponent extends React.Component {
                 </div>
                 <div id="appBox">
                     <div id="appBackground"></div>
-                    <img id="appIcon" src="../images/Icon.svg" />
+                    <img id="appIcon" src="/assets/Icon.svg" />
                     <div style={{ color: '#4a4a4a', fontSize: '20px', textAlign: 'center', fontWeight: '500', position: 'fixed', top: '38%', width: '100%' }}>COSCUP PASS</div>
                     <div style={{ color: '#4a4a4a', fontSize: '15px', textAlign: 'center', position: 'fixed', top: '50%', width: '100%' }}>下載應用程式後登入即可使用。</div>
                     <div id="store" style={{ textAlign: 'center', position: 'fixed', top: '70%', width: '100%' }}>{badges}</div>

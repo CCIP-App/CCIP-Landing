@@ -17,8 +17,8 @@ class Root extends React.Component {
           <link rel="manifest" href={config.manifest} />
         </head>
         <body style={{ overflow: 'hidden' }}>
-          <img src="../images/bkg3.png" style={{ position: 'absolute', width: '100%', height: 'auto', top: '-65px', left: '0', zIndex: '-1' }} />
-          <div style={{ background: 'url(../images/coscup.svg)', position: 'absolute', width: '100px', height: '34px', top: '25px', left: '28px' }}></div>
+          <img src="/assets/bkg3.png" style={{ position: 'absolute', width: '100%', height: 'auto', top: '-65px', left: '0', zIndex: '-1' }} />
+          <div style={{ background: 'url(/assets/coscup.svg)', position: 'absolute', width: '100px', height: '34px', top: '25px', left: '28px' }}></div>
           <div id="app"></div>
 
           <script>__REACT_DEVTOOLS_GLOBAL_HOOK__ = parent.__REACT_DEVTOOLS_GLOBAL_HOOK__</script>
