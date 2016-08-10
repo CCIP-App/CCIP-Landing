@@ -17,7 +17,7 @@ class Root extends React.Component {
           <link rel="manifest" href={config.manifest} />
         </head>
         <body style={{ overflow: 'hidden' }}>
-          <img src="/assets/bkg3.png" style={{ position: 'absolute', width: '100%', height: 'auto', top: '-65px', left: '0', zIndex: '-1' }} />
+          <img src="/assets/landing_bkg.jpg" style={{ position: 'absolute', width: '100%', height: 'auto', top: '-65px', left: '0', zIndex: '-1' }} />
           <div style={{ background: 'url(/assets/coscup.svg)', position: 'absolute', width: '100px', height: '34px', top: '25px', left: '28px' }}></div>
           <div id="app"></div>
 

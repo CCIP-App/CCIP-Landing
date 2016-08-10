@@ -13,7 +13,7 @@ let parameter = parameters();
 let hljs = require('highlight.js')
 let moment = require('moment');
 
-let background = require('../images/bkg3.png');
+let background = require('../images/landing_bkg.jpg');
 let coscup = require('../images/coscup.svg');
 
 let faviconFile = require('../favicon.ico');
