@@ -6,6 +6,9 @@ import 'whatwg-fetch';
 import React from 'react';
 import AppBadge from './AppBadge';
 import config from '../config/base';
+import parameters from './parameters'
+
+let parameter = parameters();
 
 let hljs = require('highlight.js')
 let moment = require('moment');
@@ -18,18 +21,6 @@ let manifestFile = require('../manifest.json');
 let versionFile = require('../../dist/assets/version.json');
 let appIcon = require('../images/Icon.svg');
 
-const parameters = location.search.split('?').pop().split('&').map(p => {
-    var ps = p.split('=');
-    var o = {};
-    o[ps.shift()] = ps.join('=');
-    return o;
-}).reduce((a, b) => {
-    var o = a;
-    for(var k in b) {
-        o[k] = b[k];
-    }
-    return o;
-});
 const appUrl = {
     get iOS() {
         return {
@@ -86,7 +77,7 @@ const BrowserTypes = {
 
 class AppMainComponent extends React.Component {
     loginApp() {
-        if (this.state.accessToken.length == 0 && (parameters.debug || '').toLowerCase() != 'true') {
+        if (this.state.accessToken.length == 0 && (parameter.debug || '').toLowerCase() != 'true') {
             return;
         }
         let url = null;
@@ -122,11 +113,11 @@ class AppMainComponent extends React.Component {
             .then((responseData) => {
                 this.setState({versions: responseData});
             });
-        this.changeToken(parameters.token || '');
+        this.changeToken(parameter.token || '');
     }
     changeToken(token) {
         if ((token || '').length == 0) {
-            if ((parameters.debug || '').toLowerCase() == 'true') {
+            if ((parameter.debug || '').toLowerCase() == 'true') {
                 // if debug, accessToken always valid, empty token either
                 this.setState({ isAccessTokenValid: true });
             }
@@ -146,7 +137,7 @@ class AppMainComponent extends React.Component {
             }).then(token => {
                 this.setState({ accessToken: token });
                 document.querySelector('#token').innerHTML = token;
-                if ((parameters.autoLogin || 'false').toLowerCase() == 'true' || (parameters['test-auto'] || 'false').toLowerCase() == 'true') {
+                if ((parameter.autoLogin || 'false').toLowerCase() == 'true' || (parameter['test-auto'] || 'false').toLowerCase() == 'true') {
                     this.loginApp();
                 }
             });
@@ -238,7 +229,7 @@ class AppMainComponent extends React.Component {
             'd56eabaf6b0709ff718cd5977b787a8b',
             '069b6e3c73e749684a7c34be84ecc547'
         ];
-        if ((parameters['test-list'] || 'false').toLowerCase() == 'true') {
+        if ((parameter['test-list'] || 'false').toLowerCase() == 'true') {
             testListTokens.map(t => {
                 testList.push(
                     <li key={t} style={{marginBottom: '10px'}}>
@@ -259,7 +250,7 @@ class AppMainComponent extends React.Component {
         }
         return (
             <div className="index">
-                <div id="debug" style={{ display: (parameters.debug || '').toLowerCase() == 'true' ? 'block' : 'none' }}>
+                <div id="debug" style={{ display: (parameter.debug || '').toLowerCase() == 'true' ? 'block' : 'none' }}>
                     <h3>{this.state.versions.name} Landing Page</h3>
                     <h5>v{this.state.versions.version} ({moment(this.state.versions.buildDate).format('X~YYYY-MM-DD HH:mm:ss Z')})</h5>
                     Browser: <span id="browser">{browserType}</span>

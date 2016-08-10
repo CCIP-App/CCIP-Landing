@@ -11,7 +11,7 @@ class Root extends React.Component {
           <meta httpEquiv="X-UA-Compatible" content="IE=edge,chrome=1" />
           <meta name="description" content="" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-          <meta name="apple-itunes-app" content={`app-id=${config.iTunesAppId}`} />
+          <meta name="apple-itunes-app" content={`app-id=${config.iTunesAppId}, app-argument=`} />
           <meta name="google-play-app" content={`app-id=${config.GooglePlayAppId}`} />
           <link rel="shortcut icon" href={config.favicon} />
           <link rel="manifest" href={config.manifest} />
