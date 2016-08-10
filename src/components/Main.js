@@ -86,7 +86,7 @@ const BrowserTypes = {
 
 class AppMainComponent extends React.Component {
     loginApp() {
-        if ((parameters.debug || '').toLowerCase() != 'true') {
+        if (this.state.accessToken.length == 0 && (parameters.debug || '').toLowerCase() != 'true') {
             return;
         }
         let url = null;
@@ -123,9 +123,6 @@ class AppMainComponent extends React.Component {
                 this.setState({versions: responseData});
             });
         this.changeToken(parameters.token || '');
-        if ((parameters.autoLogin || 'false').toLowerCase() == 'true') {
-            this.loginApp();
-        }
     }
     changeToken(token) {
         if ((token || '').length == 0) {
@@ -149,7 +146,7 @@ class AppMainComponent extends React.Component {
             }).then(token => {
                 this.setState({ accessToken: token });
                 document.querySelector('#token').innerHTML = token;
-                if ((parameters['test-auto'] || 'false').toLowerCase() == 'true') {
+                if ((parameters.autoLogin || 'false').toLowerCase() == 'true' || (parameters['test-auto'] || 'false').toLowerCase() == 'true') {
                     this.loginApp();
                 }
             });
