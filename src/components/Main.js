@@ -15,6 +15,7 @@ let coscup = require('../images/coscup.svg');
 
 let faviconFile = require('../favicon.ico');
 let manifestFile = require('../manifest.json');
+let versionFile = require('../../dist/assets/version.json');
 let appIcon = require('../images/Icon.svg');
 
 const parameters = location.search.split('?').pop().split('&').map(p => {
@@ -85,6 +86,9 @@ const BrowserTypes = {
 
 class AppMainComponent extends React.Component {
     loginApp() {
+        if ((parameters.debug || '').toLowerCase() != 'true') {
+            return;
+        }
         let url = null;
         if (mobile.iOS) {
             url = `${appUrl.iOS.login}${this.state.accessToken}`;
@@ -103,10 +107,8 @@ class AppMainComponent extends React.Component {
         this.state = {
           manifest: 'Loading...',
           versions: {},
-          accessToken: parameters.token || ''
-        }
-        if ((parameters.autoLogin || 'false').toLowerCase() == 'true') {
-            this.loginApp();
+          accessToken: '',
+          isAccessTokenValid: false
         }
     }
     componentWillMount() {
@@ -115,17 +117,42 @@ class AppMainComponent extends React.Component {
             .then((responseData) => {
                 this.setState({manifest: responseData});
             });
-        fetch('assets/version.json')
+        fetch(versionFile)
             .then((response) => response.json())
             .then((responseData) => {
                 this.setState({versions: responseData});
             });
+        this.changeToken(parameters.token || '');
+        if ((parameters.autoLogin || 'false').toLowerCase() == 'true') {
+            this.loginApp();
+        }
     }
     changeToken(token) {
-        this.state.accessToken = token;
-        document.querySelector('#token').innerHTML = token;
-        if ((parameters['test-auto'] || 'false').toLowerCase() == 'true') {
-            this.loginApp();
+        if ((token || '').length == 0) {
+            if ((parameters.debug || '').toLowerCase() == 'true') {
+                // if debug, accessToken always valid, empty token either
+                this.setState({ isAccessTokenValid: true });
+            }
+            return;
+        } else {
+            return new Promise((resolve, reject) => {
+                fetch(`https://coscup.cprteam.org/status?token=${token}`)
+                    .then((response) => response.json())
+                    .then((responseData) => {
+                        if (!!!responseData.message && responseData.token == token) {
+                            resolve(responseData);
+                        }
+                    });
+            }).then(status => {
+                this.setState({ status: status, isAccessTokenValid: true });
+                return status.token;
+            }).then(token => {
+                this.setState({ accessToken: token });
+                document.querySelector('#token').innerHTML = token;
+                if ((parameters['test-auto'] || 'false').toLowerCase() == 'true') {
+                    this.loginApp();
+                }
+            });
         }
     }
     render() {
@@ -229,6 +256,10 @@ class AppMainComponent extends React.Component {
         if (testList.length > 0) {
             testListResult = (<ol className="prefix0 reversed">{testList}</ol>);
         }
+        let greetings = '';
+        if (!!((this.state.status || '').user_id)) {
+            greetings = `${this.state.status.user_id} 您好，`
+        }
         return (
             <div className="index">
                 <div id="debug" style={{ display: (parameters.debug || '').toLowerCase() == 'true' ? 'block' : 'none' }}>
@@ -240,9 +271,13 @@ class AppMainComponent extends React.Component {
                     <div>Google Play Banner for <span style={{color: 'red'}}>{config.GooglePlayAppId}</span></div>
                     <div id="output"></div>
                     <br />
-                    Token: <span id="token" style={{color: 'red'}}>{this.state.accessToken}</span>
-                    <br />
-                    <pre className="hljs" style={{ display: 'none', width: '400px', marginLeft: '50px' }}
+                    Token: <span id="token" style={{color: 'red'}}>{this.state.accessToken}</span><br />
+                    User: <span id="username" style={{color: 'red'}}>{(this.state.status || '').user_id}</span><br />
+                    UserStatus: |
+                    <pre className="hljs" style={{ width: '450px', marginLeft: '50px' }}
+                        dangerouslySetInnerHTML={{ __html: hljs.highlight('json', JSON.stringify(this.state.status || '', null, 2).replace(/^"|"$/gi, '')).value }}></pre>
+                    manifest: |
+                    <pre className="hljs" style={{ width: '450px', marginLeft: '50px' }}
                         dangerouslySetInnerHTML={{ __html: hljs.highlight('json', JSON.stringify(this.state.manifest, null, 2).replace(/^"|"$/gi, '')).value }}></pre>
                     <div className="test-list">{testListResult}</div>
                 </div>
@@ -250,12 +285,13 @@ class AppMainComponent extends React.Component {
                     <div id="appBackground"></div>
                     <img id="appIcon" src="/assets/Icon.svg" />
                     <div style={{ color: '#4a4a4a', fontSize: '20px', textAlign: 'center', fontWeight: '500', position: 'fixed', top: '38%', width: '100%' }}>COSCUP PASS</div>
-                    <div style={{ color: '#4a4a4a', fontSize: '15px', textAlign: 'center', position: 'fixed', top: '50%', width: '100%' }}>下載應用程式後登入即可使用。</div>
+                    <div style={{ color: '#4a4a4a', fontSize: '15px', textAlign: 'center', position: 'fixed', top: '50%', width: '100%' }}>{greetings}下載應用程式後登入即可使用。</div>
                     <div id="store" style={{ textAlign: 'center', position: 'fixed', top: '70%', width: '100%' }}>{badges}</div>
                 </div>
                 <span id="login" onClick={this.loginApp.bind(this)}
-                    disabled={browserType == BrowserTypes.WebBrowser}>
-                        登入{browserType == BrowserTypes.WebBrowser ? ' (不支援的裝置)' : ''}
+                    disabled={browserType == BrowserTypes.WebBrowser}
+                    style={{ display: this.state.isAccessTokenValid ? 'block' : 'none', opacity: this.state.isAccessTokenValid ? '1' : '0' }}>
+                        登入{browserType == BrowserTypes.WebBrowser ? ' (不支援的裝置)' : ''}{this.state.accessToken.length == 0 ? '(清空token模式)' : ''}
                 </span>
             </div>
         );
