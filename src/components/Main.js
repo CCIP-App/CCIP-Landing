@@ -273,7 +273,8 @@ class AppMainComponent extends React.Component {
                     <div id="appBackground"></div>
                     <img id="appIcon" src="/assets/Icon.svg" />
                     <div style={{ color: '#4a4a4a', fontSize: '20px', textAlign: 'center', fontWeight: '500', position: 'fixed', top: '38%', width: '100%' }}>COSCUP PASS</div>
-                    <div style={{ color: '#4a4a4a', fontSize: '15px', textAlign: 'center', position: 'fixed', top: '50%', width: '100%' }}>{greetings}下載應用程式後登入即可使用。</div>
+                    <div style={{ color: '#4a4a4a', fontSize: '15px', textAlign: 'center', position: 'fixed', top: '50%', width: '100%' }}>{greetings}</div>
+                    <div style={{ color: '#4a4a4a', fontSize: '15px', textAlign: 'center', position: 'fixed', top: '60%', width: '100%' }}>下載應用程式後，即可登入使用。</div>
                     <div id="store" style={{ textAlign: 'center', position: 'fixed', top: '70%', width: '100%' }}>{badges}</div>
                 </div>
                 <span id="login" onClick={this.loginApp.bind(this)}
