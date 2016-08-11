@@ -124,7 +124,7 @@ class AppMainComponent extends React.Component {
             return;
         } else {
             return new Promise((resolve, reject) => {
-                fetch(`https://coscup.cprteam.org/status?token=${token}`)
+                fetch(`https://coscup.cprteam.org/landing?token=${token}`)
                     .then((response) => response.json())
                     .then((responseData) => {
                         if (!!!responseData.message && responseData.token == token) {
