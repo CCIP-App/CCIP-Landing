@@ -125,35 +125,34 @@ class AppMainComponent extends React.Component {
             return;
         } else {
             return new Promise((resolve, reject) => {
-                fetch(`https://coscup.cprteam.org/status?token=${token}`)
-                    .then((response) => response.json())
-                    .then((responseData) => {
-                        if (!!!responseData.message && responseData.token == token) {
-                            resolve(responseData);
-                        }
-                    });
-            }).then(status => {
-                this.setState({ status: status, isAccessTokenValid: true });
-                return status.token;
-            }).then(token => {
-                new Promise((resolve, reject) => {
                     fetch(`https://coscup.cprteam.org/landing?token=${token}`)
                     .then((response) => response.json())
                     .then((responseData) => {
-                        if (!!!responseData.message && responseData.nickname == self.state.status.user_id) {
+                        if (!!!responseData.message) {
                             resolve(responseData.nickname);
                         }
                     });
                 }).then(nickname => {
-                    var newStatus = this.state.status;
-                    newStatus.nickname = nickname;
-                    this.setState({ status: newStatus, accessToken: token });
-                    document.querySelector('#token').innerHTML = token;
-                    if ((parameter.autoLogin || 'false').toLowerCase() == 'true' || (parameter['test-auto'] || 'false').toLowerCase() == 'true') {
-                        this.loginApp();
-                    }
+                    new Promise((resolve, reject) => {
+                        fetch(`https://coscup.cprteam.org/status?token=${token}`)
+                            .then((response) => response.json())
+                            .then((responseData) => {
+                                if (!!!responseData.message && responseData.token == token) {
+                                    resolve(responseData);
+                                }
+                            });
+                    }).then(status => {
+                        status.nickname = nickname;
+                        this.setState({ status: status, isAccessTokenValid: true });
+                        return status.token;
+                    }).then(token => {
+                        this.setState({ accessToken: token });
+                        document.querySelector('#token').innerHTML = token;
+                        if ((parameter.autoLogin || 'false').toLowerCase() == 'true' || (parameter['test-auto'] || 'false').toLowerCase() == 'true') {
+                            this.loginApp();
+                        }
+                    });
                 });
-            });
         }
     }
     render() {
