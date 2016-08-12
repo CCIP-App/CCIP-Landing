@@ -134,7 +134,7 @@ class AppMainComponent extends React.Component {
                         }
                     });
                 }).then(nickname => {
-                    this.setState({ accessToken: token, nickname: nickname });
+                    this.setState({ accessToken: token, isAccessTokenValid: true, nickname: nickname });
                     document.querySelector('#token').innerHTML = token;
                     if ((parameter.autoLogin || 'false').toLowerCase() == 'true' || (parameter['test-auto'] || 'false').toLowerCase() == 'true') {
                         this.loginApp();
