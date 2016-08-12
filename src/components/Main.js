@@ -99,6 +99,7 @@ class AppMainComponent extends React.Component {
           manifest: 'Loading...',
           versions: {},
           accessToken: '',
+          nickname: '',
           isAccessTokenValid: false
         }
     }
@@ -133,25 +134,11 @@ class AppMainComponent extends React.Component {
                         }
                     });
                 }).then(nickname => {
-                    new Promise((resolve, reject) => {
-                        fetch(`https://coscup.cprteam.org/status?token=${token}`)
-                            .then((response) => response.json())
-                            .then((responseData) => {
-                                if (!!!responseData.message && responseData.token == token) {
-                                    resolve(responseData);
-                                }
-                            });
-                    }).then(status => {
-                        status.nickname = nickname;
-                        this.setState({ status: status, isAccessTokenValid: true });
-                        return status.token;
-                    }).then(token => {
-                        this.setState({ accessToken: token });
-                        document.querySelector('#token').innerHTML = token;
-                        if ((parameter.autoLogin || 'false').toLowerCase() == 'true' || (parameter['test-auto'] || 'false').toLowerCase() == 'true') {
-                            this.loginApp();
-                        }
-                    });
+                    this.setState({ accessToken: token, nickname: nickname });
+                    document.querySelector('#token').innerHTML = token;
+                    if ((parameter.autoLogin || 'false').toLowerCase() == 'true' || (parameter['test-auto'] || 'false').toLowerCase() == 'true') {
+                        this.loginApp();
+                    }
                 });
         }
     }
@@ -257,8 +244,8 @@ class AppMainComponent extends React.Component {
             testListResult = (<ol className="prefix0 reversed">{testList}</ol>);
         }
         let greetings = '';
-        if (!!((this.state.status || '').nickname)) {
-            greetings = `${this.state.status.nickname} 您好，`
+        if (!!(this.state.nickname || '')) {
+            greetings = `${this.state.nickname} 您好，`
         }
         return (
             <div className="index">
@@ -272,10 +259,7 @@ class AppMainComponent extends React.Component {
                     <div id="output"></div>
                     <br />
                     Token: <span id="token" style={{color: 'red'}}>{this.state.accessToken}</span><br />
-                    User: <span id="username" style={{color: 'red'}}>{(this.state.status || '').nickname}</span><br />
-                    UserStatus: |
-                    <pre className="hljs" style={{ width: '450px', marginLeft: '50px' }}
-                        dangerouslySetInnerHTML={{ __html: hljs.highlight('json', JSON.stringify(this.state.status || '', null, 2).replace(/^"|"$/gi, '')).value }}></pre>
+                    User: <span id="username" style={{color: 'red'}}>{(this.state.nickname || '')}</span><br />
                     manifest: |
                     <pre className="hljs" style={{ width: '450px', marginLeft: '50px' }}
                         dangerouslySetInnerHTML={{ __html: hljs.highlight('json', JSON.stringify(this.state.manifest, null, 2).replace(/^"|"$/gi, '')).value }}></pre>
