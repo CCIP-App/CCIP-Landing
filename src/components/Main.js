@@ -140,7 +140,6 @@ class AppMainComponent extends React.Component {
                     fetch(`https://coscup.cprteam.org/landing?token=${token}`)
                     .then((response) => response.json())
                     .then((responseData) => {
-                        console.log(responseData, self)
                         if (!!!responseData.message && responseData.nickname == self.state.status.user_id) {
                             resolve(responseData.nickname);
                         }
