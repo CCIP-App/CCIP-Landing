@@ -25,8 +25,8 @@ const appUrl = {
     get iOS() {
         return {
             login: 'ccip://login/?token=',
-            store: `itms-apps://itunes.apple.com/app/id${document.querySelector('meta[name="apple-itunes-app"]').content.split('=').pop()}`,
-            webStore: `https://itunes.apple.com/app/id${document.querySelector('meta[name="apple-itunes-app"]').content.split('=').pop()}`
+            store: `itms-apps://itunes.apple.com/app/id${document.querySelector('meta[name="apple-itunes-app"]').content.split(',').shift().trim().split('=').pop().trim()}`,
+            webStore: `https://itunes.apple.com/app/id${document.querySelector('meta[name="apple-itunes-app"]').content.split(',').shift().trim().split('=').pop().trim()}`
         }
     },
     get Android() {
