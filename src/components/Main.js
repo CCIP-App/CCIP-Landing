@@ -75,6 +75,8 @@ const BrowserTypes = {
     get WebBrowser() { return 'WebBrowser'; }
 };
 
+let browserType = '';
+
 class AppMainComponent extends React.Component {
     loginApp() {
         if (this.state.accessToken.length == 0 && (parameter.debug || '').toLowerCase() != 'true') {
@@ -134,7 +136,7 @@ class AppMainComponent extends React.Component {
                         }
                     });
                 }).then(nickname => {
-                    this.setState({ accessToken: token, isAccessTokenValid: true, nickname: nickname });
+                    this.setState({ accessToken: token, isAccessTokenValid: browserType != BrowserTypes.WebBrowser, nickname: nickname });
                     document.querySelector('#token').innerHTML = token;
                     if ((parameter.autoLogin || 'false').toLowerCase() == 'true' || (parameter['test-auto'] || 'false').toLowerCase() == 'true') {
                         this.loginApp();
@@ -144,7 +146,6 @@ class AppMainComponent extends React.Component {
     }
     render() {
         let storeBadge = [];
-        let browserType = '';
         if (mobile.iOS) {
             browserType = BrowserTypes.iOS;
             storeBadge.push(appBadge.appStore);
