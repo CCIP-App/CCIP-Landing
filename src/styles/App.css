@@ -71,6 +71,7 @@ ol.prefix0 li:nth-child(9):before {
   position: fixed;
   bottom: 0%;
   left: 50%;
+  -webkit-transform: translate(-50%, 0%);
   transform: translate(-50%, 0%);
   width: 334px;
   height: 237px;
@@ -87,6 +88,7 @@ ol.prefix0 li:nth-child(9):before {
   position: fixed;
   top: 0;
   left: 50%;
+  -webkit-transform: translate(-50%, -10%);
   transform: translate(-50%, -10%);
 }
 
@@ -95,6 +97,7 @@ ol.prefix0 li:nth-child(9):before {
     position: fixed;
     top: 30%;
     left: 50%;
+    -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     width: 336px;
     height: 278px;
@@ -103,6 +106,7 @@ ol.prefix0 li:nth-child(9):before {
     position: fixed;
     top: calc(30% + (278px / 2) + 100px);
     left: 50%;
+    -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
   }
 }
@@ -112,6 +116,7 @@ ol.prefix0 li:nth-child(9):before {
     position: fixed;
     top: calc(50% - (278px - 237px));
     left: 50%;
+    -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     width: 336px;
     height: 278px;
@@ -120,6 +125,7 @@ ol.prefix0 li:nth-child(9):before {
     position: fixed;
     top: calc(50% - (278px - 237px) + (278px / 2) + 100px);
     left: 50%;
+    -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
   }
 }
@@ -127,6 +133,16 @@ ol.prefix0 li:nth-child(9):before {
 @media screen and (max-width: 320px) {
   #appBox {
     width: 306px;
+    top: calc(50% - (278px - 237px) + 40px);
+  }
+  #appIcon {
+    width: 75px;
+    height: auto;
+    -webkit-transform: translate(-50%, 5%);
+    transform: translate(-50%, 5%);
+  }
+  #login {
+    top: calc(30% + (278px / 2) + 100px);
   }
   #appBackground {
     width: 304px;
