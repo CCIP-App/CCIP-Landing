@@ -1,12 +1,13 @@
 require('normalize.css/normalize.css');
 require('highlight.js/styles/monokai-sublime.css');
 require('styles/App.css');
+require('es6-promise').polyfill();
 
 import 'whatwg-fetch';
 import React from 'react';
 import AppBadge from './AppBadge';
 import config from '../config/base';
-import parameters from './parameters'
+import parameters from './parameters';
 
 let parameter = parameters();
 

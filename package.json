@@ -71,6 +71,7 @@
   },
   "dependencies": {
     "core-js": "^2.0.0",
+    "es6-promise": "^3.2.1",
     "highlight.js": "^9.5.0",
     "moment": "^2.14.1",
     "normalize.css": "^4.0.0",
