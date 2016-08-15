@@ -64,7 +64,8 @@ ol.prefix0 li:nth-child(9):before {
   font-size: 18px;
   text-align: center;
   text-decoration: underline;
-  width: 170px;
+  position: relative;
+  top: calc(100% + 20px);
 }
 
 #appBackground {
@@ -92,26 +93,19 @@ ol.prefix0 li:nth-child(9):before {
   transform: translate(-50%, -10%);
 }
 
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 800px) and (orientation: portrait) {
   #appBox {
     position: fixed;
-    top: 30%;
+    top: 40%;
     left: 50%;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     width: 336px;
     height: 278px;
   }
-  #login {
-    position: fixed;
-    top: calc(30% + (278px / 2) + 100px);
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-  }
 }
 
-@media screen and (max-width: 450px) {
+@media screen and (max-width: 768px) and (orientation: portrait) {
   #appBox {
     position: fixed;
     top: calc(50% - (278px - 237px));
@@ -121,16 +115,28 @@ ol.prefix0 li:nth-child(9):before {
     width: 336px;
     height: 278px;
   }
-  #login {
-    position: fixed;
-    top: calc(50% - (278px - 237px) + (278px / 2) + 100px);
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+}
+
+@media screen and (max-width: 570px) and (orientation: portrait) {
+  #appBox {
+    width: 306px;
+    top: calc(50% - (278px - 237px) + 40px);
   }
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 450px) and (orientation: portrait) {
+  #appBox {
+    position: fixed;
+    top: calc(50% - (278px - 237px));
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 336px;
+    height: 278px;
+  }
+}
+
+@media screen and (max-width: 320px) and (orientation: portrait) {
   #appBox {
     width: 306px;
     top: calc(50% - (278px - 237px) + 40px);
@@ -141,10 +147,40 @@ ol.prefix0 li:nth-child(9):before {
     -webkit-transform: translate(-50%, 5%);
     transform: translate(-50%, 5%);
   }
-  #login {
-    top: calc(30% + (278px / 2) + 100px);
-  }
   #appBackground {
     width: 304px;
+  }
+}
+
+@media screen and (max-height: 399px) and (orientation: landscape) {
+  #appBox {
+    width: 306px;
+    height: 238px;
+    position: fixed;
+    top: 45%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+  #appIcon {
+    width: 75px;
+    height: auto;
+    -webkit-transform: translate(-50%, 5%);
+    transform: translate(-50%, 5%);
+  }
+  #appBackground {
+    height: 197px;
+  }
+}
+
+@media screen and (min-height: 400px) and (orientation: landscape) {
+  #appBox {
+    width: 306px;
+    height: 278px;
+    position: fixed;
+    top: 45%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
   }
 }

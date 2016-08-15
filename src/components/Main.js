@@ -274,12 +274,12 @@ class AppMainComponent extends React.Component {
                     <div style={{ color: '#4a4a4a', fontSize: '15px', textAlign: 'center', position: 'fixed', top: '50%', width: '100%' }}>{greetings}</div>
                     <div style={{ color: '#4a4a4a', fontSize: '15px', textAlign: 'center', position: 'fixed', top: '60%', width: '100%' }}>下載應用程式後，即可登入使用。</div>
                     <div id="store" style={{ textAlign: 'center', position: 'fixed', top: '70%', width: '100%' }}>{badges}</div>
+                    <span id="login" onClick={this.loginApp.bind(this)}
+                        disabled={browserType == BrowserTypes.WebBrowser}
+                        style={{ display: this.state.isAccessTokenValid ? 'block' : 'none', opacity: this.state.isAccessTokenValid ? '1' : '0' }}>
+                            登入{browserType == BrowserTypes.WebBrowser ? ' (不支援的裝置)' : ''}{this.state.accessToken.length == 0 ? '(清空token模式)' : ''}
+                    </span>
                 </div>
-                <span id="login" onClick={this.loginApp.bind(this)}
-                    disabled={browserType == BrowserTypes.WebBrowser}
-                    style={{ display: this.state.isAccessTokenValid ? 'block' : 'none', opacity: this.state.isAccessTokenValid ? '1' : '0' }}>
-                        登入{browserType == BrowserTypes.WebBrowser ? ' (不支援的裝置)' : ''}{this.state.accessToken.length == 0 ? '(清空token模式)' : ''}
-                </span>
             </div>
         );
     }
